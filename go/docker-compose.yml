@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  go-server:
+    container_name: go-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 4000:4000
+    env_file:
+      - .env.local
+    tty: true
+    depends_on:
+      go-mysql:
+        condition: service_healthy
+
+  go-mysql:
+    container_name: go-mysql
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    env_file: .env.local
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u admin -padmin
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - go-mysql-data:/var/lib/mysql
+
+volumes:
+  go-mysql-data:

@@ -9,7 +9,12 @@
   ],
   "settings": {
     "cSpell.words": [
-      "healthcheck"
+      "healthcheck",
+      "Gendar",
+      "gorm",
+      "usecase",
+      "Usecase",
+      "interactor"
     ]
   }
 }

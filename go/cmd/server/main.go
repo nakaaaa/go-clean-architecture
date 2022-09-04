@@ -1,19 +1,33 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"github.com/nakaaaa/go-clean-architecture/go/internal/infrastructure/api"
+	"github.com/nakaaaa/go-clean-architecture/go/internal/infrastructure/log"
 )
 
+var logger = log.GetLogger()
+
 func main() {
-	router := gin.Default()
+	err := NewServer()
+	if err != nil {
+		logger.Errorf("fail to NewServer(): err=%v", err)
+		panic(err.Error())
+	}
+}
 
-	router.GET("/healthcheck", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "OK",
-		})
-	})
+func NewServer() error {
+	// server, err := config.NewServerConfig()
+	// if err != nil {
+	// 	logger.Errorf("fail to config.NewServerConfig(): err=%v", err)
+	// 	return err
+	// }
 
-	router.Run()
+	// port := fmt.Sprintf(":%d", server.Port)
+	// r := config.NewRouter(port)
+	// r.Run()
+
+	server := api.MustNewServer()
+	server.Server.Run()
+
+	return nil
 }
