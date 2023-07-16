@@ -11,7 +11,7 @@ type User struct {
 	Age uint32
 
 	// 性別　0:男 1:女
-	Gendar uint32
+	Gender uint32
 }
 
 const (
