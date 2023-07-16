@@ -14,6 +14,11 @@ type User struct {
 	Gendar uint32
 }
 
+const (
+	UserGenderMan   = 0
+	UserGenderWoman = 1
+)
+
 func (u User) TableName() string {
 	return "users"
 }
