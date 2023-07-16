@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"errors"
+
 	"github.com/nakaaaa/go-clean-architecture/go/internal/domain/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -28,9 +30,12 @@ func (rp *UserRepository) GetList(db *gorm.DB) ([]model.User, error) {
 func (rp *UserRepository) GetByUserID(db *gorm.DB, userID int) (*model.User, error) {
 	var model model.User
 
-	err := db.Where("`uid`=?", userID).First(model).Error
+	err := db.Where("`uid`=?", userID).First(&model).Error
 	if err != nil {
-		logger.Errorf("fail to db.First(): err=%v", err)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+
 		return nil, err
 	}
 
@@ -39,6 +44,7 @@ func (rp *UserRepository) GetByUserID(db *gorm.DB, userID int) (*model.User, err
 
 func (rp *UserRepository) AddOrUpdate(db *gorm.DB, user *model.User) (*model.User, error) {
 	err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "uid"}},
 		UpdateAll: true,
 	}).Create(user).Error
 	if err != nil {
