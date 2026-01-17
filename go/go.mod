@@ -1,8 +1,6 @@
 module github.com/nakaaaa/go-clean-architecture/go
 
-go 1.22
-
-toolchain go1.22.0
+go 1.25.6
 
 require (
 	github.com/ahmetalpbalkan/go-linq v3.0.0+incompatible
